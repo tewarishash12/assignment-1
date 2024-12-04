@@ -1,41 +1,63 @@
-import React from "react";
-import ImageWithRetry from "./ImageWithRetry";
+import React from 'react'
 
-const ImageComponent = ({ name, images }) => {
-    const placeholderImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUwCJYSnbBLMEGWKfSnWRGC_34iCCKkxePpg&s";
+const ImageComponent = ({ images, name, designation }) => {
+    const link = "https://png.pngtree.com/png-vector/20240407/ourmid/pngtree-wrong-sign-incorrect-symbol-vector-png-image_12267047.png";
+    const wrong = "https://w7.pngwing.com/pngs/385/780/png-transparent-red-x-illustration-x-mark-check-mark-wrong-sign-angle-symmetry-cross.png";
+    const placeholder = "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg"
 
-    const imagesToDisplay = [
-        ...images,
-        ...Array(4 - images.length).fill({ url: placeholderImage, ready:true, error:false }) 
-    ];
+    if (images.length < 4) {
+        while (images.length < 4) {
+            images = [...images, { url: placeholder, ready: true, error: false }];
+        }
+    }
+    console.log(images);
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-3xl font-bold text-center mb-8">
-                {name.split("\n").map((text, index) => (
-                    <span key={index} className={index === 0 ? "font-bold" : "font-normal"}>
-                        {text}
-                        {index === 0 && <br />}
-                    </span>
-                ))}
-            </h1>
-            <div className="grid grid-cols-2 gap-6">
-                {imagesToDisplay.map((image, index) => (
-                    <ImageWithRetry key={index} image={image} />
-                ))}
+        <div className='bg-black text-white flex justify-around h-[30vh] items-center'>
+            {/* img */}
+            <div className='flex w-[80px] flex-wrap'>
+                {images.map((image, idx) =>
+                    image.ready ? (
+                        <img
+                            src={image.url}
+                            alt={idx}
+                            className='h-[38px] w-[38px] rounded-full'
+                        />
+                    ) : (
+                        <img
+                            src={wrong}
+                            alt={idx}
+                            className='h-[38px] w-[38px] rounded-full'
+                        />
+                    )
+                )}
             </div>
-        </div>
-    );
-};
 
-const Placeholder = ({ count }) =>
-    Array.from({ length: count }).map((_, index) => (
-        <div
-            key={index}
-            className="w-10 h-10 rounded-full bg-gray-200 flex justify-center"
-        >
-            <span className="text-xs text-gray-500">N/A</span>
-        </div>
-    ));
+            {/* text */}
+            <div>
+                <div className='text-4xl font-bold' >
+                    {name}
+                </div>
+                <div className='text-gray-300 text-xl' >
+                    {designation}
+                </div>
+            </div>
 
-export default ImageComponent;
+            {/* error */}
+            {images.map((image, idx)=>
+                image.error ?  (
+                    <div>
+                <img
+                    src={link}
+                    alt="error"
+                    className='rounded-full h-[100px] w-[100px]'
+                />
+            </div>
+                ) : ""
+            )}
+            
+        </div>
+    )
+}
+
+export default ImageComponent
